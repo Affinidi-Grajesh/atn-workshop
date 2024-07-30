@@ -53,6 +53,34 @@ For more details on the command run below command
 affinidi token create-token --help
 ```
 
+#### Configure Credential Issuance Configuration
+
+To issue a Verifiable Credential, it is required to setup the **Issuance Configuration** on your project, where you select the **issuing wallet** and **supported schemas** to create a credential offer that the application issue
+
+You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
+
+1. Login on [Affinidi Portal](https://portal.affinidi.com)
+
+2. Open `Wallets` menu under the `Tools` section and click on `Create Wallet` with any name (e.g. `MyWallet`) and DID method as `did:key`.
+
+For more information, refer to the [Wallets documentation](https://docs.affinidi.com/dev-tools/wallets)
+
+3. Go to `Credential Issuance Service` under `Services` section.
+
+4. Click on `Create Configuration` and set the following fields:
+
+   `Issuing Wallet`: Select Wallet Created previous step
+   `Lifetime of Credential Offer` as `600`
+
+5. Add schemas by clicking on "Add new item" under `Supported Schemas`
+
+Schema 1 :
+
+- _Schema_ as `Manual Input`,
+- _Credential Type ID_ as `TworkshopSchemaV1R0`
+- _JSON Schema URL_ as `https://schema.affinidi.io/TworkshopSchemaV1R0.json`
+- _JSDON-LD Context URL_ = `https://schema.affinidi.io/TworkshopSchemaV1R0.jsonld`
+
 #### Step 2
 
 Create Next Auth frontend Variables `src/lib/variables.ts`
@@ -546,36 +574,6 @@ export const CredentialsClient = {
 ```
 
 #### Step 9
-
-Configure Credential Issuance
-
-To issue a Verifiable Credential, it is required to setup the **Issuance Configuration** on your project, where you select the **issuing wallet** and **supported schemas** to create a credential offer that the application issue
-
-You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
-
-1. Login on [Affinidi Portal](https://portal.affinidi.com)
-
-2. Open `Wallets` menu under the `Tools` section and click on `Create Wallet` with any name (e.g. `MyWallet`) and DID method as `did:key`.
-
-For more information, refer to the [Wallets documentation](https://docs.affinidi.com/dev-tools/wallets)
-
-3. Go to `Credential Issuance Service` under `Services` section.
-
-4. Click on `Create Configuration` and set the following fields:
-
-   `Issuing Wallet`: Select Wallet Created previous step
-   `Lifetime of Credential Offer` as `600`
-
-5. Add schemas by clicking on "Add new item" under `Supported Schemas`
-
-Schema 1 :
-
-- _Schema_ as `Manual Input`,
-- _Credential Type ID_ as `TworkshopSchemaV1R0`
-- _JSON Schema URL_ as `https://schema.affinidi.io/TworkshopSchemaV1R0.json`
-- _JSDON-LD Context URL_ = `https://schema.affinidi.io/TworkshopSchemaV1R0.jsonld`
-
-#### Step 10
 
 Try the App with Affinidi Login & Affinidi CIS
 

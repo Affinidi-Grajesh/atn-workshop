@@ -16,6 +16,63 @@ Personal Access Token as its needed for Affinidi TDK Auth provider. You can refe
 
 Ignore if allready done configuration for credentials issuance
 
+#### Affinidi Iota Configuration
+
+create Affinidi Iota framework configuration
+
+You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
+
+1. Login on [Affinidi Portal](https://portal.affinidi.com)
+
+2. Click on Create Configuration and set the following fields:
+
+   `Wallet`: Create a new wallet and provide the new wallet name, or select an existing Wallet that will sign and issue the credentials to the user.
+
+   `Vault JWT Expiration time`: Credential Offers have a limited lifetime to enhance security. Consumers must claim the offer within this timeframe.
+
+3. Optionally, you can configure whether to enable:
+
+   `Enable Verification`: To verify the credentials the user shares using the Credential Verification service.
+
+   `Enable Consent Audit Log`: To store the consent given by the user whenever they share data with the website.
+
+4. After setting the fields and providing the list of the supported schema, click Create.
+5. Provide the name of the Presentation Definition and then select from the available templates to pre-populate the editor. You can modify the presentation definition template based on the required data you would like to request from the Affinidi Vault.
+
+for eg
+
+```javascript
+{
+  "id": "token_with_workshopSchema",
+  "input_descriptors": [
+    {
+      "id": "workshopSchema",
+      "name": "Workshop VC",
+      "purpose": "Check if Vault contains the required VC.",
+      "constraints": {
+        "fields": [
+          {
+            "path": [
+              "$.type"
+            ],
+            "purpose": "Check if VC type is correct",
+            "filter": {
+              "type": "array",
+              "contains": {
+                "type": "string",
+                "pattern": "TworkshopSchemaV1R0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+6. Click on Save. ConfigurationId & QueryId is generated, update in `.env` file.
+
 #### Step 2
 
 Create new routes `src/pages/iota.tsx` and put dynamic content from Next Auth and `SSR : False`
@@ -257,63 +314,6 @@ NEXT_PUBLIC_IOTA_CONFIGURATION_ID = "";
 ```
 
 ### Step 12
-
-create Affinidi Iota framework configuration
-
-You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
-
-1. Login on [Affinidi Portal](https://portal.affinidi.com)
-
-2. Click on Create Configuration and set the following fields:
-
-   `Wallet`: Create a new wallet and provide the new wallet name, or select an existing Wallet that will sign and issue the credentials to the user.
-
-   `Vault JWT Expiration time`: Credential Offers have a limited lifetime to enhance security. Consumers must claim the offer within this timeframe.
-
-3. Optionally, you can configure whether to enable:
-
-   `Enable Verification`: To verify the credentials the user shares using the Credential Verification service.
-
-   `Enable Consent Audit Log`: To store the consent given by the user whenever they share data with the website.
-
-4. After setting the fields and providing the list of the supported schema, click Create.
-5. Provide the name of the Presentation Definition and then select from the available templates to pre-populate the editor. You can modify the presentation definition template based on the required data you would like to request from the Affinidi Vault.
-
-for eg
-
-```javascript
-{
-  "id": "token_with_workshopSchema",
-  "input_descriptors": [
-    {
-      "id": "workshopSchema",
-      "name": "Workshop VC",
-      "purpose": "Check if Vault contains the required VC.",
-      "constraints": {
-        "fields": [
-          {
-            "path": [
-              "$.type"
-            ],
-            "purpose": "Check if VC type is correct",
-            "filter": {
-              "type": "array",
-              "contains": {
-                "type": "string",
-                "pattern": "TworkshopSchemaV1R0"
-              }
-            }
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-6. Click on Save. ConfigurationId & QueryId is generated, update in `.env` file.
-
-#### Step 13
 
 Try the App with Affinidi Login & Affinidi CIS
 

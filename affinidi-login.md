@@ -26,6 +26,14 @@ This document illustrate step by step guide to add Affinidi Login with `nextjs` 
 npm install next-auth
 ```
 
+#### Pre-requisite
+
+Create Login Configuration using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
+
+Redirect URL : `http://localhost:3000/api/auth/callback/affinidi`
+
+More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/languages/affinidi-login-basic/#create-login-configuration)
+
 #### Step 1
 
 Add CSS with for Affinidi login button [style Guide](https://docs.affinidi.com/docs/affinidi-login/button-styleguide/) `src/styles/globals.css`
@@ -374,14 +382,6 @@ PROVIDER_ISSUER = "<AUTH.ISSUER>";
 ```
 
 #### Step 11
-
-Create Login Configuration using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
-
-Redirect URL : `http://localhost:3000/api/auth/callback/affinidi`
-
-More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/languages/affinidi-login-basic/#create-login-configuration)
-
-#### Step 12
 
 Try the App with Affinidi Login
 
