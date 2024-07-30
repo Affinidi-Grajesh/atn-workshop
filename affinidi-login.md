@@ -6,6 +6,41 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 npx create-next-app
 ```
 
+Sample Response
+
+```javascript
+#LetsGoBuild >npx create-next-app
+✔ What is your project named? … workshop
+✔ Would you like to use TypeScript? …  Yes
+✔ Would you like to use ESLint? …  Yes
+✔ Would you like to use Tailwind CSS? …  Yes
+✔ Would you like to use `src/` directory? … Yes
+✔ Would you like to use App Router? (recommended) …  No
+✔ Would you like to customize the default import alias (@/*)? …  No
+Creating a new Next.js app in /Users/admin/workshop.
+
+Using npm.
+
+Initializing project with template: default-tw
+
+
+Installing dependencies:
+- react
+- react-dom
+- next
+
+Installing devDependencies:
+- typescript
+- @types/node
+- @types/react
+- @types/react-dom
+- postcss
+- tailwindcss
+- eslint
+- eslint-config-next
+
+```
+
 ## Getting Started
 
 First, run the development server:
