@@ -167,7 +167,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
     import { useEffect, useState } from "react";
     import { getSession, signOut } from "next-auth/react";
     import { Session } from "next-auth";
-    // import { clientLogin } from "@/lib/auth/client-login";
+    import { clientLogin } from "@/lib/auth/client-login";
     ```
 
     ```javascript
@@ -188,7 +188,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
       }, []);
 
       async function handleLogin() {
-      // await clientLogin();
+      await clientLogin();
       }
       return (
         <main
@@ -445,6 +445,12 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
     Add Apps credentials in env file
 
     ```
+    LOG_LEVEL="debug"
+    NEXTAUTH_URL="http://localhost:3000"
+    NEXTAUTH_SECRET="<secert of your choice>"
+
+    # Affinidi Login Specific variable
+
     PROVIDER_CLIENT_ID = "<AUTH.CLIENT_ID>";
     PROVIDER_CLIENT_SECRET = "<AUTH.CLIENT_SECRET>";
     PROVIDER_ISSUER = "<AUTH.ISSUER>";
