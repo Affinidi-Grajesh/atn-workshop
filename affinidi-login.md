@@ -442,6 +442,10 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
     create `.env` variables
 
+    ```sh
+    touch .env
+    ```
+
     Add Apps credentials in env file
 
     ```
