@@ -2,26 +2,22 @@
 
 Affinidi Login enhances security, privacy, and ensures compatibility with industry standards while simplifying authentication processes. With Affinidi Login, you can create a secure, user-friendly login experience by using OID4VP (Open ID for Verifiable Presentations).
 
-
 ## Introduction
 
 We will use a simple [Next.js](https://nextjs.org/) app and enable Affinidi Login on home page to utilizie OID4VP for secure passwordless login.
 
 ## Pre-Requisite
 
- To complete this workshop, you would require a devleoper account at Affinidi Portal and few tools as lsited below.
- 
- - An account on [Affinidi portal](https://portal.affinidi.com/)
- - [Login Configuration](https://docs.affinidi.com/docs/affinidi-login/login-configuration/) using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
- - Redirect URL : `http://localhost:3000/api/auth/callback/affinidi`
- 
+To complete this workshop, you would require a devleoper account at Affinidi Portal and few tools as lsited below.
+
+- An account on [Affinidi portal](https://portal.affinidi.com/)
+- [Login Configuration](https://docs.affinidi.com/docs/affinidi-login/login-configuration/) using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
+- Redirect URL : `http://localhost:3000/api/auth/callback/affinidi`
 
 You need to have the following installed on your machine:
 
 - [NodeJs v18 and higher](https://nodejs.org). (it's recommended to use [nvm](https://github.com/nvm-sh/nvm))
 - [VS Code](https://code.visualstudio.com/)
-
-
 
 More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/languages/affinidi-login-basic/#create-login-configuration)
 
@@ -29,9 +25,9 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
 - ### Bootstarp a nextjs app
 
-    ```sh
-    npx create-next-app
-    ```
+  ```sh
+  npx create-next-app
+  ```
 
   Sample Response
 
@@ -91,7 +87,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   touch src/lib/auth/auth-provider.ts
   touch src/lib/auth/auth-options.ts
   touch src/lib/auth/client-login.ts
-  touch 'src/pages/api/auth/[...nextauth].ts'
+  touch src/pages/api/auth/[...nextauth].ts
 
   ```
 
@@ -101,9 +97,8 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   npm install next-auth
   ```
 
+- ## Changes in Code
 
-
-- ## Changes in Code 
   - ### add css for login button
 
     Add CSS with for Affinidi login button [style Guide](https://docs.affinidi.com/docs/affinidi-login/button-styleguide/) `src/styles/globals.css`
@@ -162,11 +157,9 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
     }
     ```
 
-  - ###  Add login button at Home page
+  - ### Add login button at Home page
 
     Import next package and Update `src/pages/index.tsx` with Affinidi Login Buttion and `handleLogin` to initiate Login
-
-    
 
     ```javascript
     import Image from "next/image";
@@ -355,7 +348,11 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
     ```javascript
     import { Provider } from "next-auth/providers/index";
-    import { providerClientId, providerClientSecret, providerIssuer } from "../env";
+    import {
+      providerClientId,
+      providerClientSecret,
+      providerIssuer,
+    } from "../env";
 
     export const PROVIDER_ATTRIBUTES_KEY = "custom";
 

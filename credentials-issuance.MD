@@ -10,6 +10,20 @@ Install Dependencies for Affinidi Credentials Issuance Client And Affinidi TDK A
 npm install @affinidi-tdk/auth-provider @affinidi-tdk/credential-issuance-client
 ```
 
+- ## Create required directories and files
+
+  ```bash
+
+  mkdir -p src/pages/api/clients/
+  mkdir -p src/pages/api/credentials/
+
+  touch src/pages/credentials.tsx
+  touch src/pages/api/credentials/issuance-start.ts
+  touch src/pages/api/clients/credentials-client.ts
+  touch src/lib/variables.ts
+
+  ```
+
 #### Create Personal Access Token (PAT)
 
 Personal Access Token as its needed for Affinidi TDK Auth provider. You can refer the [Affinidi Documentation](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-token/#affinidi-token-create-token) for more details.

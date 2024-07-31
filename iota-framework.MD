@@ -7,8 +7,22 @@ This document illustrate step by step guide to add Affinidi Iota framework with 
 Install Dependencies for Affinidi Credentials Issuance Client And Affinidi TDK Auth provider
 
 ```javascript
-npm install @affinidi-tdk/auth-provider @affinidi-tdk/credential-issuance-client
+npm install @affinidi-tdk/auth-provider @affinidi-tdk/iota-browser @affinidi-tdk/iota-core
 ```
+
+- ## Create required directories and files
+
+  ```bash
+
+  mkdir -p src/components/iota
+  mkdir -p src/pages/api/iota
+
+  touch src/pages/iota.tsx
+  touch src/components/iota/IotaClientPage.tsx
+  touch src/pages/api/iota/start.ts
+
+
+  ```
 
 #### Create Personal Access Token (PAT)
 
