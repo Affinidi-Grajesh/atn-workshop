@@ -61,6 +61,24 @@ This document illustrate step by step guide to add Affinidi Login with `nextjs` 
 npm install next-auth
 ```
 
+Create required folder and files 
+
+```bash
+mkdir -p src/lib/auth
+mkdir -p src/types
+mkdir -p src/pages/api/auth
+
+touch src/lib/env.ts
+touch src/types/types.ts
+touch src/types/next-auth.d.ts
+touch src/lib/auth/auth-provider.ts
+touch src/lib/auth/auth-options.ts
+touch src/lib/auth/client-login.ts
+touch 'src/pages/api/auth/[...nextauth].ts'
+
+```
+
+
 #### Pre-requisite
 
 Create Login Configuration using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
