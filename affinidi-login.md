@@ -68,7 +68,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
   ```
 
-- ## Test App
+- ## Test the newly created app
 
   Start the development server:
 
