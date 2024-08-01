@@ -320,11 +320,11 @@ export const queryId = process.env.NEXT_PUBLIC_IOTA_QUERY_ID!;
 
 #### Step 11
 
-update `.env` file
+update `.env` file with frontend variables
 
-```javascript
-NEXT_PUBLIC_IOTA_QUERY_ID = "";
-NEXT_PUBLIC_IOTA_CONFIGURATION_ID = "";
+```
+NEXT_PUBLIC_IOTA_QUERY_ID = ""
+NEXT_PUBLIC_IOTA_CONFIGURATION_ID = ""
 ```
 
 ### Step 12
