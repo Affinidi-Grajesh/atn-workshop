@@ -11,6 +11,7 @@ We will use a simple [Next.js](https://nextjs.org/) app and enable Affinidi Logi
 To complete this workshop, you would require a devleoper account at Affinidi Portal and few tools as lsited below.
 
 - An account on [Affinidi portal](https://portal.affinidi.com/)
+- [Affinidi cli](https://docs.affinidi.com/dev-tools/affinidi-cli/)
 - [Login Configuration](https://docs.affinidi.com/docs/affinidi-login/login-configuration/) using [Affinidi CLI](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-login/#affinidi-login-create-config) or [Affinidi Portal](https://portal.affinidi.com/affinidiLogin)
 - Redirect URL : `http://localhost:3000/api/auth/callback/affinidi`
 
@@ -90,6 +91,36 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   touch src/pages/api/auth/[...nextauth].ts
 
   ```
+ - ### Add env file
+
+    create `.env` file
+
+    ```bash
+    touch .env
+    ```
+
+    Add Apps credentials in env file
+
+    ```
+    LOG_LEVEL="debug"
+    NEXTAUTH_URL="http://localhost:3000"
+    NEXTAUTH_SECRET="<secert of your choice>"
+
+    # Affinidi Login Specific variable
+
+    PROVIDER_CLIENT_ID = "<AUTH.CLIENT_ID>";
+    PROVIDER_CLIENT_SECRET = "<AUTH.CLIENT_SECRET>";
+    PROVIDER_ISSUER = "<AUTH.ISSUER>";
+    ```
+    - ### Create Env reader
+
+    Create Env variables in `src/lib/env.ts`
+
+    ```javascript
+    export const providerClientId = process.env.PROVIDER_CLIENT_ID!;
+    export const providerClientSecret = process.env.PROVIDER_CLIENT_SECRET!;
+    export const providerIssuer = process.env.PROVIDER_ISSUER!;
+    ```
 
 - ## Install auth library for nextjs
 
@@ -98,65 +129,197 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   ```
 
 - ## Changes in Code
+  - ### Add types for next-auth
 
-  - ### add css for login button
+    Create types for `next-auth` and `next-auth/jwt` in `src/types/next-auth.d.ts`
 
-    Add CSS with for Affinidi login button [style Guide](https://docs.affinidi.com/docs/affinidi-login/button-styleguide/) `src/styles/globals.css`
+    ```javascript
+    import { DefaultSession, DefaultUser } from "next-auth";
+    import { DefaultJWT } from "next-auth/jwt";
 
-    for eg: for Large button use below code snippet
+    import { UserInfo } from "src/types/types";
+
+    declare module "next-auth" {
+      interface Session extends DefaultSession {
+        userId: string;
+        user?: UserInfo;
+        accessToken: string;
+        idToken: string;
+      }
+    }
+
+    declare module "next-auth/jwt" {
+      interface JWT extends DefaultJWT {
+        userId: string;
+        user?: UserInfo;
+        accessToken: string;
+        idToken: string;
+      }
+    }
 
     ```
-    .affinidi-login-dark-l {
-      border: 0;
-      width: 224px;
-      height: 56px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      box-sizing: border-box;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 32px;
-      object-fit: contain;
-      border-radius: 48px;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M3.22 20.281A11.966 11.966 0 0 0 11.904 24c3.415 0 6.498-1.428 8.683-3.719H3.219h.001zM20.588 6.762H1.106A11.933 11.933 0 0 0 0 10.48h20.588V6.762zM20.586 3.719A11.966 11.966 0 0 0 11.902 0 11.966 11.966 0 0 0 3.22 3.719h17.367zM20.588 13.521H0c.167 1.319.548 2.57 1.106 3.719h19.482v-3.718zM22.703 6.762c.558 1.148.94 2.4 1.106 3.718h4.78V6.762h-5.886z" fill="%23040822"/><path d="M28.586 20.281h-8V24h8V20.28zM22.703 17.24h5.886v-3.718h-4.78a11.93 11.93 0 0 1-1.106 3.718zM28.586 0h-8v3.719h8V0z" fill="%23040822"/><path d="M23.807 10.48A11.931 11.931 0 0 0 22.7 6.76a12.012 12.012 0 0 0-2.115-3.041v16.563A12.045 12.045 0 0 0 22.7 17.24 11.932 11.932 0 0 0 23.9 12c0-.516-.031-1.023-.094-1.522v.001z" fill="%231D58FC"/></svg>')
-        no-repeat 25px center;
-      background-color: #ffffff;
-      color: #000;
-      padding-left: 60px;
 
-      flex-grow: 0;
-      font-family: Figtree;
-      font-size: 18px;
-      font-weight: 600;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.22;
-      letter-spacing: 0.6px;
-    }
+  - ### Add a type for auth response
 
-    .affinidi-login-dark-l:hover {
-      background-color: #e6e6e9;
-    }
+    Create Response Types in `src/types/types.ts`
 
-    .affinidi-login-dark-l:active {
-      background-color: #cdced3;
-    }
+    ```javascript
+    export type ResponseError = {
+      message: string,
+    };
 
-    .affinidi-login-dark-l-loading {
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g clip-path="url(%230e2gocc7wa)"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.727 4.545v2.728l3.864-3.637L9.727 0v2.727C5.457 2.727 2 5.982 2 10c0 1.427.444 2.755 1.198 3.873l1.41-1.327A5.09 5.09 0 0 1 3.932 10c0-3.01 2.598-5.455 5.795-5.455zm6.53 1.582-1.41 1.328c.425.763.676 1.627.676 2.545 0 3.01-2.599 5.454-5.796 5.454v-2.727l-3.863 3.637L9.727 20v-2.727c4.27 0 7.727-3.255 7.727-7.273a6.904 6.904 0 0 0-1.197-3.873z" fill="%231D2138"/></g><defs><clipPath id="0e2gocc7wa"><path fill="%23fff" d="M0 0h20v20H0z"/></clipPath></defs></svg>')
-        no-repeat center;
-      background-color: #e6e6e9;
-    }
-
-    .affinidi-login-dark-l:disabled {
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none"><path d="M3.927 20.281A11.966 11.966 0 0 0 12.61 24c3.416 0 6.499-1.428 8.684-3.719H3.926h.001zM21.295 6.762H1.813A11.933 11.933 0 0 0 .707 10.48h20.588V6.762zM21.293 3.719A11.967 11.967 0 0 0 12.609 0a11.966 11.966 0 0 0-8.683 3.719h17.367zM21.295 13.521H.707c.167 1.319.548 2.57 1.106 3.719h19.482v-3.718zM23.41 6.762c.558 1.148.94 2.4 1.106 3.718h4.78V6.762H23.41z" fill="%23fff"/><path d="M29.293 20.281h-8V24h8V20.28zM23.41 17.24h5.886v-3.718h-4.78a11.933 11.933 0 0 1-1.106 3.718zM29.293 0h-8v3.719h8V0z" fill="%23fff"/><path d="M24.514 10.48a11.934 11.934 0 0 0-1.106-3.72 12.017 12.017 0 0 0-2.115-3.041v16.563a12.05 12.05 0 0 0 2.115-3.042 11.935 11.935 0 0 0 1.2-5.24c0-.516-.031-1.023-.094-1.522v.001z" fill="%23fff"/></svg>')
-        no-repeat 25px center;
-      background-color: #e6e6e9;
-      color: #ffffff;
-    }
+    export type UserInfo = {
+      email?: string,
+      phoneNumber?: string,
+    };
     ```
 
+
+
+
+  
+
+  
+
+  
+
+  
+
+  - ### Add Affinidi as Auth Option
+
+    Create Auth Option for Login `src/lib/auth/auth-options.ts`
+
+    ```javascript
+    import { NextAuthOptions } from "next-auth";
+
+    import { provider, PROVIDER_ATTRIBUTES_KEY } from "./auth-provider";
+    import { UserInfo } from "@/types/types";
+
+    export const authOptions: NextAuthOptions = {
+      // debug: true,
+      session: { strategy: "jwt" },
+      providers: [provider],
+      callbacks: {
+        // checks whether user is allowed to sign in
+        async signIn({ account }) {
+          return Boolean(
+            account?.provider === provider.id &&
+              account.access_token &&
+              account.id_token
+          );
+        },
+
+        // "account" and "profile" are only passed the first time this callback is called on a new session, after the user signs in
+        // this defines how JWT is generated and is then used in session() callback as "token"
+        async jwt({ token, account, profile }) {
+          const profileItems = (profile as any)?.[PROVIDER_ATTRIBUTES_KEY];
+          if (profile && profileItems) {
+            let userDID: string;
+            let user: UserInfo = {};
+            userDID = profileItems.find(
+              (item: any) => typeof item.did === "string"
+            )?.did;
+            user.email = profileItems.find(
+              (item: any) => typeof item.email === "string"
+            )?.email;
+            //  user.phoneNumber = profileItems.find(
+            //    (item: any) => typeof item.phoneNumber === "string"
+            //  )?.phoneNumber;
+
+            token = {
+              ...token,
+              user,
+              ...(userDID && { userId: userDID }),
+            };
+          }
+          if (account) {
+            token = {
+              ...token,
+              ...(account?.access_token && { accessToken: account.access_token }),
+              ...(account?.id_token && { idToken: account.id_token }),
+            };
+          }
+          // Here you also have access to account.access_token and account.id_token
+
+          return token;
+        },
+
+        // session is persisted as an HttpOnly cookie
+        async session({ session, token }) {
+          return {
+            ...session,
+            ...(token.user && { user: { ...session.user, ...token.user } }),
+            ...(token.userId && { userId: token.userId }),
+            ...(token.accessToken && { accessToken: token.accessToken }),
+            ...(token.idToken && { idToken: token.idToken }),
+          };
+        },
+      },
+    };
+
+    ```
+
+  - ### Create Affinidi Auth Provider
+
+    Create Affinidi Auth provider `src/lib/auth/auth-provider.ts`
+
+    ```javascript
+    import { Provider } from "next-auth/providers/index";
+    import {
+      providerClientId,
+      providerClientSecret,
+      providerIssuer,
+    } from "../env";
+
+    export const PROVIDER_ATTRIBUTES_KEY = "custom";
+
+    export const provider: Provider = {
+      id: "affinidi",
+      name: "Affinidi",
+      clientId: providerClientId,
+      clientSecret: providerClientSecret,
+      type: "oauth",
+      wellKnown: `${providerIssuer}/.well-known/openid-configuration`,
+      authorization: {
+        params: {
+          prompt: "login",
+          scope: "openid offline_access",
+        },
+      },
+      client: {
+        token_endpoint_auth_method: "client_secret_post",
+      },
+      idToken: true,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          email: profile.custom?.find((i: any) => typeof i.email === "string")
+            ?.email,
+        };
+      },
+    };
+    ```
+  - ### Create API to handle Next Auth login
+
+    Create API to call Login `src/pages/api/auth/[...nextauth].ts`
+
+    ```javascript
+    import { authOptions } from "@/lib/auth/auth-options";
+    import NextAuth from "next-auth";
+
+    export default NextAuth(authOptions);
+    ```
+  - ### Create a Login method
+
+    create client login `src/lib/auth/client-login.ts` which is being called from `handleLogin` function
+
+    ```javascript
+    import { signIn } from "next-auth/react";
+
+    export async function clientLogin() {
+      await signIn("affinidi");
+    }
+    ```
   - ### Add login button at Home page
 
     Import next package and Update `src/pages/index.tsx` with Affinidi Login Buttion and `handleLogin` to initiate Login
@@ -243,224 +406,67 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
         </main>
       );
     }
-    ```
+    ```  
 
-  - ### Create a Login method
 
-    create client login `src/lib/auth/client-login.ts` which is being called from `handleLogin` function
+  - ### add css for login button
 
-    ```javascript
-    import { signIn } from "next-auth/react";
+    Add CSS with for Affinidi login button [style Guide](https://docs.affinidi.com/docs/affinidi-login/button-styleguide/) `src/styles/globals.css`
 
-    export async function clientLogin() {
-      await signIn("affinidi");
-    }
-    ```
-
-  - ### Create API to handle Next Auth login
-
-    Create API to call Login `src/pages/api/auth/[...nextauth].ts`
-
-    ```javascript
-    import { authOptions } from "@/lib/auth/auth-options";
-    import NextAuth from "next-auth";
-
-    export default NextAuth(authOptions);
-    ```
-
-  - ### Add Affinidi as Auth option
-
-    Create Auth Option for Login `src/lib/auth/auth-options.ts`
-
-    ```javascript
-    import { NextAuthOptions } from "next-auth";
-
-    import { provider, PROVIDER_ATTRIBUTES_KEY } from "./auth-provider";
-    import { UserInfo } from "@/types/types";
-
-    export const authOptions: NextAuthOptions = {
-      // debug: true,
-      session: { strategy: "jwt" },
-      providers: [provider],
-      callbacks: {
-        // checks whether user is allowed to sign in
-        async signIn({ account }) {
-          return Boolean(
-            account?.provider === provider.id &&
-              account.access_token &&
-              account.id_token
-          );
-        },
-
-        // "account" and "profile" are only passed the first time this callback is called on a new session, after the user signs in
-        // this defines how JWT is generated and is then used in session() callback as "token"
-        async jwt({ token, account, profile }) {
-          const profileItems = (profile as any)?.[PROVIDER_ATTRIBUTES_KEY];
-          if (profile && profileItems) {
-            let userDID: string;
-            let user: UserInfo = {};
-            userDID = profileItems.find(
-              (item: any) => typeof item.did === "string"
-            )?.did;
-            user.email = profileItems.find(
-              (item: any) => typeof item.email === "string"
-            )?.email;
-            //  user.phoneNumber = profileItems.find(
-            //    (item: any) => typeof item.phoneNumber === "string"
-            //  )?.phoneNumber;
-
-            token = {
-              ...token,
-              user,
-              ...(userDID && { userId: userDID }),
-            };
-          }
-          if (account) {
-            token = {
-              ...token,
-              ...(account?.access_token && { accessToken: account.access_token }),
-              ...(account?.id_token && { idToken: account.id_token }),
-            };
-          }
-          // Here you also have access to account.access_token and account.id_token
-
-          return token;
-        },
-
-        // session is persisted as an HttpOnly cookie
-        async session({ session, token }) {
-          return {
-            ...session,
-            ...(token.user && { user: { ...session.user, ...token.user } }),
-            ...(token.userId && { userId: token.userId }),
-            ...(token.accessToken && { accessToken: token.accessToken }),
-            ...(token.idToken && { idToken: token.idToken }),
-          };
-        },
-      },
-    };
+    for eg: for Large button use below code snippet
 
     ```
+    .affinidi-login-dark-l {
+      border: 0;
+      width: 224px;
+      height: 56px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      box-sizing: border-box;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 32px;
+      object-fit: contain;
+      border-radius: 48px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M3.22 20.281A11.966 11.966 0 0 0 11.904 24c3.415 0 6.498-1.428 8.683-3.719H3.219h.001zM20.588 6.762H1.106A11.933 11.933 0 0 0 0 10.48h20.588V6.762zM20.586 3.719A11.966 11.966 0 0 0 11.902 0 11.966 11.966 0 0 0 3.22 3.719h17.367zM20.588 13.521H0c.167 1.319.548 2.57 1.106 3.719h19.482v-3.718zM22.703 6.762c.558 1.148.94 2.4 1.106 3.718h4.78V6.762h-5.886z" fill="%23040822"/><path d="M28.586 20.281h-8V24h8V20.28zM22.703 17.24h5.886v-3.718h-4.78a11.93 11.93 0 0 1-1.106 3.718zM28.586 0h-8v3.719h8V0z" fill="%23040822"/><path d="M23.807 10.48A11.931 11.931 0 0 0 22.7 6.76a12.012 12.012 0 0 0-2.115-3.041v16.563A12.045 12.045 0 0 0 22.7 17.24 11.932 11.932 0 0 0 23.9 12c0-.516-.031-1.023-.094-1.522v.001z" fill="%231D58FC"/></svg>')
+        no-repeat 25px center;
+      background-color: #ffffff;
+      color: #000;
+      padding-left: 60px;
 
-  - ### Create Affinidi Auth Option
-
-    Create Affinidi Auth provider `src/lib/auth/auth-provider.ts`
-
-    ```javascript
-    import { Provider } from "next-auth/providers/index";
-    import {
-      providerClientId,
-      providerClientSecret,
-      providerIssuer,
-    } from "../env";
-
-    export const PROVIDER_ATTRIBUTES_KEY = "custom";
-
-    export const provider: Provider = {
-      id: "affinidi",
-      name: "Affinidi",
-      clientId: providerClientId,
-      clientSecret: providerClientSecret,
-      type: "oauth",
-      wellKnown: `${providerIssuer}/.well-known/openid-configuration`,
-      authorization: {
-        params: {
-          prompt: "login",
-          scope: "openid offline_access",
-        },
-      },
-      client: {
-        token_endpoint_auth_method: "client_secret_post",
-      },
-      idToken: true,
-      profile(profile) {
-        return {
-          id: profile.sub,
-          email: profile.custom?.find((i: any) => typeof i.email === "string")
-            ?.email,
-        };
-      },
-    };
-    ```
-
-  - ### Add types for next-auth
-
-    Create types for `next-auth` and `next-auth/jwt` in `src/types/next-auth.d.ts`
-
-    ```javascript
-    import { DefaultSession, DefaultUser } from "next-auth";
-    import { DefaultJWT } from "next-auth/jwt";
-
-    import { UserInfo } from "src/types/types";
-
-    declare module "next-auth" {
-      interface Session extends DefaultSession {
-        userId: string;
-        user?: UserInfo;
-        accessToken: string;
-        idToken: string;
-      }
+      flex-grow: 0;
+      font-family: Figtree;
+      font-size: 18px;
+      font-weight: 600;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.22;
+      letter-spacing: 0.6px;
     }
 
-    declare module "next-auth/jwt" {
-      interface JWT extends DefaultJWT {
-        userId: string;
-        user?: UserInfo;
-        accessToken: string;
-        idToken: string;
-      }
+    .affinidi-login-dark-l:hover {
+      background-color: #e6e6e9;
     }
 
+    .affinidi-login-dark-l:active {
+      background-color: #cdced3;
+    }
+
+    .affinidi-login-dark-l-loading {
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g clip-path="url(%230e2gocc7wa)"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.727 4.545v2.728l3.864-3.637L9.727 0v2.727C5.457 2.727 2 5.982 2 10c0 1.427.444 2.755 1.198 3.873l1.41-1.327A5.09 5.09 0 0 1 3.932 10c0-3.01 2.598-5.455 5.795-5.455zm6.53 1.582-1.41 1.328c.425.763.676 1.627.676 2.545 0 3.01-2.599 5.454-5.796 5.454v-2.727l-3.863 3.637L9.727 20v-2.727c4.27 0 7.727-3.255 7.727-7.273a6.904 6.904 0 0 0-1.197-3.873z" fill="%231D2138"/></g><defs><clipPath id="0e2gocc7wa"><path fill="%23fff" d="M0 0h20v20H0z"/></clipPath></defs></svg>')
+        no-repeat center;
+      background-color: #e6e6e9;
+    }
+
+    .affinidi-login-dark-l:disabled {
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none"><path d="M3.927 20.281A11.966 11.966 0 0 0 12.61 24c3.416 0 6.499-1.428 8.684-3.719H3.926h.001zM21.295 6.762H1.813A11.933 11.933 0 0 0 .707 10.48h20.588V6.762zM21.293 3.719A11.967 11.967 0 0 0 12.609 0a11.966 11.966 0 0 0-8.683 3.719h17.367zM21.295 13.521H.707c.167 1.319.548 2.57 1.106 3.719h19.482v-3.718zM23.41 6.762c.558 1.148.94 2.4 1.106 3.718h4.78V6.762H23.41z" fill="%23fff"/><path d="M29.293 20.281h-8V24h8V20.28zM23.41 17.24h5.886v-3.718h-4.78a11.933 11.933 0 0 1-1.106 3.718zM29.293 0h-8v3.719h8V0z" fill="%23fff"/><path d="M24.514 10.48a11.934 11.934 0 0 0-1.106-3.72 12.017 12.017 0 0 0-2.115-3.041v16.563a12.05 12.05 0 0 0 2.115-3.042 11.935 11.935 0 0 0 1.2-5.24c0-.516-.031-1.023-.094-1.522v.001z" fill="%23fff"/></svg>')
+        no-repeat 25px center;
+      background-color: #e6e6e9;
+      color: #ffffff;
+    }
     ```
-
-  - ### Add a type for auth response
-
-    Create Response Types in `src/types/types.ts`
-
-    ```javascript
-    export type ResponseError = {
-      message: string,
-    };
-
-    export type UserInfo = {
-      email?: string,
-      phoneNumber?: string,
-    };
-    ```
-
-  - ### Create Env reader
-
-    Create Env variables in `src/lib/env.ts`
-
-    ```javascript
-    export const providerClientId = process.env.PROVIDER_CLIENT_ID!;
-    export const providerClientSecret = process.env.PROVIDER_CLIENT_SECRET!;
-    export const providerIssuer = process.env.PROVIDER_ISSUER!;
-    ```
-
-  - ### Add env file
-
-    create `.env` variables
-
-    ```sh
-    touch .env
-    ```
-
-    Add Apps credentials in env file
-
-    ```
-    LOG_LEVEL="debug"
-    NEXTAUTH_URL="http://localhost:3000"
-    NEXTAUTH_SECRET="<secert of your choice>"
-
-    # Affinidi Login Specific variable
-
-    PROVIDER_CLIENT_ID = "<AUTH.CLIENT_ID>";
-    PROVIDER_CLIENT_SECRET = "<AUTH.CLIENT_SECRET>";
-    PROVIDER_ISSUER = "<AUTH.ISSUER>";
-    ```
-
-  - ### Step 11
+  - ### Run The application to experience Affinidi login
 
     Try the App with Affinidi Login
 
@@ -468,4 +474,4 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
     npm run dev
     ```
 
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the home page with Affinidi login button. CLicking on button willl start login flow using Affinidi Vault. 
