@@ -12,7 +12,7 @@ npm install @affinidi-tdk/auth-provider @affinidi-tdk/credential-issuance-client
 
 - ## Create required directories and files
 
-  ```bash
+  ```sh
 
   mkdir -p src/pages/api/clients/
   mkdir -p src/pages/api/credentials/

@@ -77,7 +77,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
 - ## Create required directories and files
 
-  ```bash
+  ```sh
   mkdir -p src/lib/auth
   mkdir -p src/types
   mkdir -p src/pages/api/auth
@@ -91,44 +91,47 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   touch src/pages/api/auth/[...nextauth].ts
 
   ```
- - ### Add env file
 
-    create `.env` file
+- ### Add env file
 
-    ```bash
-    touch .env
-    ```
+  create `.env` file
 
-    Add Apps credentials in env file
+  ```sh
+  touch .env
+  ```
 
-    ```
-    LOG_LEVEL="debug"
-    NEXTAUTH_URL="http://localhost:3000"
-    NEXTAUTH_SECRET="<secert of your choice>"
+  Add Apps credentials in env file
 
-    # Affinidi Login Specific variable
+  ```
+  LOG_LEVEL="debug"
+  NEXTAUTH_URL="http://localhost:3000"
+  NEXTAUTH_SECRET="<secert of your choice>"
 
-    PROVIDER_CLIENT_ID = "<AUTH.CLIENT_ID>";
-    PROVIDER_CLIENT_SECRET = "<AUTH.CLIENT_SECRET>";
-    PROVIDER_ISSUER = "<AUTH.ISSUER>";
-    ```
-    - ### Create Env reader
+  # Affinidi Login Specific variable
 
-    Create Env variables in `src/lib/env.ts`
+  PROVIDER_CLIENT_ID = "<AUTH.CLIENT_ID>";
+  PROVIDER_CLIENT_SECRET = "<AUTH.CLIENT_SECRET>";
+  PROVIDER_ISSUER = "<AUTH.ISSUER>";
+  ```
 
-    ```javascript
-    export const providerClientId = process.env.PROVIDER_CLIENT_ID!;
-    export const providerClientSecret = process.env.PROVIDER_CLIENT_SECRET!;
-    export const providerIssuer = process.env.PROVIDER_ISSUER!;
-    ```
+  - ### Create Env reader
+
+  Create Env variables in `src/lib/env.ts`
+
+  ```javascript
+  export const providerClientId = process.env.PROVIDER_CLIENT_ID!;
+  export const providerClientSecret = process.env.PROVIDER_CLIENT_SECRET!;
+  export const providerIssuer = process.env.PROVIDER_ISSUER!;
+  ```
 
 - ## Install auth library for nextjs
 
-  ```bash
+  ```sh
   npm install next-auth
   ```
 
 - ## Changes in Code
+
   - ### Add types for next-auth
 
     Create types for `next-auth` and `next-auth/jwt` in `src/types/next-auth.d.ts`
@@ -173,17 +176,6 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
       phoneNumber?: string,
     };
     ```
-
-
-
-
-  
-
-  
-
-  
-
-  
 
   - ### Add Affinidi as Auth Option
 
@@ -299,6 +291,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
       },
     };
     ```
+
   - ### Create API to handle Next Auth login
 
     Create API to call Login `src/pages/api/auth/[...nextauth].ts`
@@ -309,6 +302,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
     export default NextAuth(authOptions);
     ```
+
   - ### Create a Login method
 
     create client login `src/lib/auth/client-login.ts` which is being called from `handleLogin` function
@@ -320,6 +314,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
       await signIn("affinidi");
     }
     ```
+
   - ### Add login button at Home page
 
     Import next package and Update `src/pages/index.tsx` with Affinidi Login Buttion and `handleLogin` to initiate Login
@@ -406,8 +401,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
         </main>
       );
     }
-    ```  
-
+    ```
 
   - ### add css for login button
 
@@ -466,6 +460,7 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
       color: #ffffff;
     }
     ```
+
   - ### Run The application to experience Affinidi login
 
     Try the App with Affinidi Login
@@ -474,4 +469,4 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
     npm run dev
     ```
 
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the home page with Affinidi login button. CLicking on button willl start login flow using Affinidi Vault. 
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the home page with Affinidi login button. CLicking on button willl start login flow using Affinidi Vault.
