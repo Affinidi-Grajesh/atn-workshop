@@ -93,7 +93,11 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
   ```
  - ### Add env file
 
-    create `.env` variables
+    create `.env` file
+
+    ```bash
+    touch .env
+    ```
 
     Add Apps credentials in env file
 
