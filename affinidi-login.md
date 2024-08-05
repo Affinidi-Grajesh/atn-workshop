@@ -18,11 +18,22 @@ To complete this workshop, you would require a devleoper account at Affinidi Por
 You need to have the following installed on your machine:
 
 - [NodeJs v18 and higher](https://nodejs.org). (it's recommended to use [nvm](https://github.com/nvm-sh/nvm))
-- [VS Code](https://code.visualstudio.com/)
+- [VS Code](https://code.visualstudio.com/) or similar IDE for development.
 
 More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/languages/affinidi-login-basic/#create-login-configuration)
 
 ## Step by Step Guide to enable Affinidi Login
+
+Before proceeding with the steps below, make sure you have completed the pre-requisites mentioned above.
+
+<div style="border: 2px solid red; padding: 10px; border-radius: 5px; background-color: #ffe6e6;">
+  <strong>Important Note</strong>
+  <p>The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
+  </p>
+</div>
+&nbsp;
+
+Now, let's continue with the step-by-step guide to enable Affinidi Login in the sample App.
 
 ### Bootstarp a nextjs app
 
@@ -75,7 +86,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Create required directories and files
+### Create required directories and files in the bootstrap app
 
 ```sh
 mkdir -p src/lib/auth
@@ -100,7 +111,9 @@ create `.env` file
 touch .env
 ```
 
-Add Apps credentials in env file
+### Update environment variables
+
+Add Apps credentials in `.env` file
 
 ```
 LOG_LEVEL="debug"
@@ -124,13 +137,13 @@ export const providerClientSecret = process.env.PROVIDER_CLIENT_SECRET!;
 export const providerIssuer = process.env.PROVIDER_ISSUER!;
 ```
 
+## Implement Application Code Changes
+
 ## Install auth library for nextjs
 
 ```sh
 npm install next-auth
 ```
-
-## Changes in Code
 
 ### Add types for next-auth
 
@@ -400,7 +413,7 @@ export default function Home() {
 
 Add CSS with for Affinidi login button [style Guide](https://docs.affinidi.com/docs/affinidi-login/button-styleguide/) `src/styles/globals.css`
 
-for eg: for Large button use below code snippet
+**for eg**: for Large button use below code snippet
 
 ```css
 .affinidi-login-dark-l {

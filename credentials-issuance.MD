@@ -1,73 +1,116 @@
 ## Affinidi Credential Issuance Service
 
-This document illustrate step by step guide to add Affinidi Credentials Issuance Service with `nextjs` Framework with `nextauthjs` Library
+Credential Issuance Service provides applications with secure methods of issuing and claiming credentials. It implements the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) (OpenID for Verifiable Credential Issuance) protocol, which provides the mechanism for Issuers to issue Verifiable Credentials to Affinidi Vault users and obtain the credentials using the OAuth 2.0 authorisation flow.
 
-#### Step 1
+More Details on Affinidi Credential Issuance Service is available on [Affinidi Documentation](https://docs.affinidi.com/docs/affinidi-elements/credential-issuance/)
 
-Install Dependencies for Affinidi Credentials Issuance Client And Affinidi TDK Auth provider
+## Introduction
+
+We will use a simple [Next.js](https://nextjs.org/) app and enable Affinidi Credentials Issuance Service in `credentials` page with `nextjs` Framework.
+
+## Pre-Requisite
+
+To complete this workshop, you would require a devleoper account at Affinidi Portal and few tools as lsited below.
+
+- An account on [Affinidi portal](https://portal.affinidi.com/)
+- [Affinidi cli](https://docs.affinidi.com/dev-tools/affinidi-cli/)
+- Implement [Affinidi Login](/affinidi-login.md) to the sample Application created from this workshop
+
+You need to have the following installed on your machine:
+
+- [NodeJs v18 and higher](https://nodejs.org). (it's recommended to use [nvm](https://github.com/nvm-sh/nvm))
+- [VS Code](https://code.visualstudio.com/) or any familar IDE for development.
+
+More details here in [Affinidi Documentation](https://docs.affinidi.com/docs/affinidi-elements/credential-issuance/)
+
+<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
+  <strong>Note</strong>
+  <p>This sample App is extension of same App that we worked on for Affinidi Login.
+  </p>
+</div>
+&nbsp;
+
+## Step by Step Guide to enable Affinidi Credential Issuance Service
+
+Before proceeding with the steps below, make sure you have completed the pre-requisites mentioned above.
+
+<div style="border: 2px solid red; padding: 10px; border-radius: 5px; background-color: #ffe6e6;">
+  <strong>Important Note</strong>
+  <p>The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
+  </p>
+</div>
+&nbsp;
+
+Now, let's continue with the step-by-step guide to enable Affinidi Credentials Issuance service in sample App.
+
+### Install Dependencies
+
+Install Dependencies for `Affinidi Credentials Issuance Client` And `Affinidi TDK Auth provider`
 
 ```javascript
 npm install @affinidi-tdk/auth-provider @affinidi-tdk/credential-issuance-client
 ```
 
-- ## Create required directories and files
+### Create required directories and files
 
-  ```sh
+```sh
 
-  mkdir -p src/pages/api/clients/
-  mkdir -p src/pages/api/credentials/
+mkdir -p src/pages/api/clients/
+mkdir -p src/pages/api/credentials/
 
-  touch src/pages/credentials.tsx
-  touch src/pages/api/credentials/issuance-start.ts
-  touch src/pages/api/clients/credentials-client.ts
-  touch src/lib/variables.ts
+touch src/pages/credentials.tsx
+touch src/pages/api/credentials/issuance-start.ts
+touch src/pages/api/clients/credentials-client.ts
+touch src/lib/variables.ts
 
-  ```
+```
 
-#### Create Personal Access Token (PAT)
+### Create Personal Access Token (PAT)
 
-Personal Access Token as its needed for Affinidi TDK Auth provider. You can refer the [Affinidi Documentation](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-token/#affinidi-token-create-token) for more details.
+Personal Access Token (PAT) is like a machine user that acts on your behalf to the Affinidi services. You can use the PAT to authenticate to the Affinidi services and automate specific tasks within your application. A Personal Access Token (PAT) lives outside of Projects, meaning PAT can access multiple projects once granted by the user.
 
-for eg :
+More Details on [Personal Access Token](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-token/#how-does-pat-authentication-works) here.
+
+Personal Access Token is its needed for `Affinidi TDK Auth provider`.
+
+You can refer the [Affinidi Documentation](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-token/#affinidi-token-create-token) for creating pesronal access token from CLI.
+
+**for eg**
 
 1. Log in to Affinidi CLI by running
 
-```sh
-affinidi start
-```
+   ```sh
+   affinidi start
+   ```
 
 2. Once logged in successfully, create token by running below command
 
-```sh
-affinidi token create-token -n MyAppVerificationKey -w -p my-secret-passphrase
-```
+   ```sh
+   affinidi token create-token -n MyAppVerificationKey -w -p my-secret-passphrase
+   ```
 
-`MyAppVerificationKey` : Replace with your own Name of the Personal Access Token, at least 8 chars long
+   `MyAppVerificationKey` : Replace with your own Name of the Personal Access Token, at least 8 chars long
 
-`my-secret-passphrase` : Replace with your own Passphrase for generation of private public key pair
+   `my-secret-passphrase` : Replace with your own Passphrase for generation of private public key pair
 
-Sample response:
+   **Sample response**
 
-```json
-{
-  "apiGatewayUrl": "https://apse1.api.affinidi.io",
-  "tokenEndpoint": "https://apse1.auth.developer.affinidi.io/auth/oauth2/token",
-  "keyId": "XXXXXXXXXXXXXXXX",
-  "tokenId": "XXXXXXXXXXXXXXXX",
-  "passphrase": "XXXXXXXXXXXXXXXX",
-  "privateKey": "XXXXXXXXXXXXXXXX",
-  "publicKey": "XXXXXXXXXXXXXXXX",
-  "projectId": "XXXXXXXXXXXXXXXX"
-}
-```
+   ```json
+   {
+     "tokenId": "XXXXXXXXXXXXXXXX",
+     "passphrase": "XXXXXXXXXXXXXXXX",
+     "privateKey": "XXXXXXXXXXXXXXXX",
+     "projectId": "XXXXXXXXXXXXXXXX"
+   }
+   ```
 
-For more details on the command run below command
+   For more details on the command run below command
 
-```sh
-affinidi token create-token --help
-```
+   ```sh
+   affinidi token create-token --help
+   ```
 
-#### Configure Credential Issuance Configuration
+### Configure Credential Issuance Configuration
 
 To issue a Verifiable Credential, it is required to setup the **Issuance Configuration** on your project, where you select the **issuing wallet** and **supported schemas** to create a credential offer that the application issue
 
@@ -88,14 +131,42 @@ For more information, refer to the [Wallets documentation](https://docs.affinidi
 
 5. Add schemas by clicking on "Add new item" under `Supported Schemas`
 
-Schema 1 :
+**Schema 1** :
 
 - _Schema_ as `Manual Input`,
 - _Credential Type ID_ as `TworkshopSchemaV1R0`
 - _JSON Schema URL_ as `https://schema.affinidi.io/TworkshopSchemaV1R0.json`
 - _JSDON-LD Context URL_ = `https://schema.affinidi.io/TworkshopSchemaV1R0.jsonld`
 
-#### Step 2
+&nbsp;
+
+More details on `Schema Builder` refer [Affinidi documentation](https://docs.affinidi.com/docs/affinidi-elements/schema-builder/).
+
+### Update environment variables
+
+update `.env` file
+
+```javascript
+## frontend only variables
+
+NEXT_PUBLIC_VAULT_URL="https://vault.affinidi.com/claim?credential_offer_uri"
+NEXT_PUBLIC_CREDENTIAL_TYPE_ID="TworkshopSchemaV1R0"
+
+## backend only variables , update details from personal access token response from above steps
+
+TOKEN_ENDPOINT="https://apse1.auth.developer.affinidi.io/auth/oauth2/token"
+API_GATEWAY_URL="https://apse1.api.affinidi.io"
+
+PROJECT_ID=""
+TOKEN_ID=""
+PASSPHRASE=""
+PRIVATE_KEY= ""
+
+```
+
+## Implement Application Code Changes
+
+### Create frontend env reader
 
 Create Next Auth frontend Variables `src/lib/variables.ts`
 
@@ -105,7 +176,7 @@ export const vaultUrl = process.env.NEXT_PUBLIC_VAULT_URL!;
 export const credentialTypeId = process.env.NEXT_PUBLIC_CREDENTIAL_TYPE_ID!;
 ```
 
-#### Step 3
+### Update backend env reader
 
 update env variables `src/lib/env.ts`
 
@@ -121,29 +192,7 @@ export const tokenId = process.env.TOKEN_ID!;
 
 ```
 
-#### Step 4
-
-update `.env` file
-
-```javascript
-## frontend only variables
-
-NEXT_PUBLIC_VAULT_URL="https://vault.affinidi.com/claim?credential_offer_uri"
-NEXT_PUBLIC_CREDENTIAL_TYPE_ID="TworkshopSchemaV1R0"
-
-## backend only variables
-
-TOKEN_ENDPOINT="https://apse1.auth.developer.affinidi.io/auth/oauth2/token"
-API_GATEWAY_URL="https://apse1.api.affinidi.io"
-
-PROJECT_ID=""
-TOKEN_ID=""
-PASSPHRASE=""
-PRIVATE_KEY= ""
-
-```
-
-#### Step 5
+### Create `/credentials` page with `form` and `button` with default vaules and session
 
 Create `src/pages/credentials.tsx` Page
 
@@ -203,43 +252,8 @@ const Credentials: FC = () => {
     fetchsession();
   }, []);
 
-//   const handleSubmit = async (event: React.FormEvent) => {
-//     event.preventDefault();
-//     console.log("Form submitted with credentials: ", credentials);
-
-//     const apiData = {
-//       credentialData: {
-//         email: credentials.email,
-//         name: credentials.name,
-//         phoneNumber: credentials.phoneNumber,
-//         dob: credentials.dob,
-//         gender: credentials.gender,
-//         address: credentials.address,
-//         postcode: credentials.postcode,
-//         city: credentials.city,
-//         country: credentials.country,
-//       },
-//       credentialTypeId: credentialTypeId,
-//       holderDid: session?.userId,
-//     };
-
-//     const response = await fetch("/api/credentials/issuance-start", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(apiData),
-//     });
-
-//     if (response.ok) {
-//       let DataResponse = await response.json();
-
-//       console.log("Credentials Issued");
-//       console.log(DataResponse);
-//       setissuanceResponse(DataResponse);
-//     } else {
-//       console.error("Failed to issue credentials");
-//     }
+  const handleSubmit = async (event: React.FormEvent) => {
+    //your handleSubmit logic here
   };
 
   return (
@@ -437,7 +451,7 @@ export default Credentials;
 
 ```
 
-#### Step 6
+### Apply Action on `handleSubmit` function
 
 Create `handleSubmit` function which invoke the Affinidi Credentials Issuance Service.
 
@@ -482,7 +496,7 @@ const handleSubmit = async (event: React.FormEvent) => {
 };
 ```
 
-#### Step 7
+### Create frontend API used in `handleSubmit` function to pass details to backend API
 
 Create Front-end API `src/pages/api/credentials/issuance-start.ts`
 
@@ -539,7 +553,7 @@ export default handler;
 
 ```
 
-#### Step 8
+### Create backend API to call `Affinidi TDK` for Affinidi Auth Provider and Affinidi Credentials Issuance Client
 
 create backend API Call `src/pages/api/clients/credentials-client.ts`
 
@@ -587,7 +601,7 @@ export const CredentialsClient = {
 };
 ```
 
-#### Step 9
+### Run The application to experience Affinidi Credentials Issuance
 
 Try the App with Affinidi Login & Affinidi CIS
 
