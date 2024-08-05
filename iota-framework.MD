@@ -24,23 +24,17 @@ You need to have the following installed on your machine:
 
 More details here in [Affinidi Documentation](https://docs.affinidi.com/frameworks/iota-framework/)
 
-<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
-  <strong>Note</strong>
-  <p>This sample App is extension of same App that we worked on for Affinidi Login and Affinidi Credentials Issuance Service.
-  </p>
-</div>
-&nbsp;
+> [!IMPORTANT]
+> This sample App is extension of same App that we worked on for Affinidi Login and Affinidi Credentials Issuance Service.
+> &nbsp;
 
 ## Step by Step Guide to enable Affinidi Iota framework
 
 Before proceeding with the steps below, make sure you have completed the pre-requisites mentioned above.
 
-<div style="border: 2px solid red; padding: 10px; border-radius: 5px; background-color: #ffe6e6;">
-  <strong>Important Note</strong>
-  <p>The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
-  </p>
-</div>
-&nbsp;
+> [!WARNING]
+> The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
+> &nbsp;
 
 Now, let's continue with the step-by-step guide to enable Affinidi Iota framework in sample App.
 
@@ -52,12 +46,9 @@ Install Dependencies for `Affinidi Iota framework` which is `iota-browser` & `io
 npm install @affinidi-tdk/iota-browser @affinidi-tdk/iota-core
 ```
 
-<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
-  <strong>Note</strong>
-  <p>It also require Affinidi TDK Auth Provider, however we already have installed that package as part of Affinidi Credential Issuance service.
-  </p>
-</div>
-&nbsp;
+> [!IMPORTANT]
+> It also require Affinidi TDK Auth Provider, however we already have installed that package as part of Affinidi Credential Issuance service.
+> &nbsp;
 
 ### Create required directories and files
 
@@ -83,11 +74,9 @@ Personal Access Token is its needed for `Affinidi TDK Auth provider`.
 
 You can refer the [Affinidi Documentation](https://docs.affinidi.com/dev-tools/affinidi-cli/manage-token/#affinidi-token-create-token) for creating pesronal access token from CLI.
 
-<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
-  <strong>Note</strong>
-  <p>we already have create personal access token (PAT) as part of Affinidi Credential Issuance service. we will reuse the same token for Affinidi Iota framework as well.
-  </p>
-</div>
+> [!IMPORTANT]
+> we already have create personal access token (PAT) as part of Affinidi Credential Issuance service. we will reuse the same token for Affinidi Iota framework as well.
+
 &nbsp;
 
 ### Configure Affinidi Iota Configuration
@@ -147,12 +136,9 @@ You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
 
 6. Click on Save. `ConfigurationId` & `QueryId` is generated.
 
-<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
-  <strong>Note</strong>
-  <p>The above PEX query provide response only in case affinidi vault has claimed credentials using Affinidi Credential Issuance enabled from the previous workshop steps.
-  </p>
-</div>
-&nbsp;
+> [!IMPORTANT]
+> The above PEX query provide response only in case affinidi vault has claimed credentials using Affinidi Credential Issuance enabled from the previous workshop steps.
+> &nbsp;
 
 ### Update environment variables
 

@@ -23,23 +23,18 @@ You need to have the following installed on your machine:
 
 More details here in [Affinidi Documentation](https://docs.affinidi.com/docs/affinidi-elements/credential-issuance/)
 
-<div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
-  <strong>Note</strong>
-  <p>This sample App is extension of same App that we worked on for Affinidi Login.
-  </p>
-</div>
+> [!IMPORTANT]
+> This sample App is extension of same App that we worked on for Affinidi Login.
+
 &nbsp;
 
 ## Step by Step Guide to enable Affinidi Credential Issuance Service
 
 Before proceeding with the steps below, make sure you have completed the pre-requisites mentioned above.
 
-<div style="border: 2px solid red; padding: 10px; border-radius: 5px; background-color: #ffe6e6;">
-  <strong>Important Note</strong>
-  <p>The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
-  </p>
-</div>
-&nbsp;
+> [!WARNING]
+> The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
+> &nbsp;
 
 Now, let's continue with the step-by-step guide to enable Affinidi Credentials Issuance service in sample App.
 
