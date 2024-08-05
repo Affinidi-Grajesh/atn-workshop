@@ -26,11 +26,9 @@ More details here in [Affinidi Documentation](https://docs.affinidi.com/labs/lan
 
 Before proceeding with the steps below, make sure you have completed the pre-requisites mentioned above.
 
-<div style="border: 2px solid red; padding: 10px; border-radius: 5px; background-color: #ffe6e6;">
-  <strong>Important Note</strong>
-  <p>The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
-  </p>
-</div>
+> **Important Note:**
+> The steps showcased to this sample application is provided only as a guide to quickly explore and learn how to integrate the components of Affinidi Trust Network into your application. This is NOT a Production-ready implementation. Do not deploy this to a production environment.
+
 &nbsp;
 
 Now, let's continue with the step-by-step guide to enable Affinidi Login in the sample App.
