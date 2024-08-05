@@ -149,7 +149,7 @@ You can easily do this using the [Affinidi Portal](https://portal.affinidi.com)
 
 <div style="border: 2px solid green; padding: 10px; border-radius: 5px; background-color: #cefad0;">
   <strong>Note</strong>
-  <p>The above query provide resonse only in case affinidi vault has claimed credentials using Affinidi Credential Issuance described previous workshop.
+  <p>The above PEX query provide response only in case affinidi vault has claimed credentials using Affinidi Credential Issuance enabled from the previous workshop steps.
   </p>
 </div>
 &nbsp;
